@@ -25,4 +25,13 @@ public class ProjectEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_seq")
     private UserEntity user;
+
+    public static ProjectEntity createProject(String projectName, UserEntity userEntity) {
+        return new ProjectEntity(projectName, userEntity);
+    }
+
+    private ProjectEntity(String projectName, UserEntity userEntity) {
+        this.projectName = projectName;
+        this.user = userEntity;
+    }
 }
