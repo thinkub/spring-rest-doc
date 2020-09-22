@@ -25,4 +25,12 @@ public class User {
                 .userName(entity.getUserName())
                 .build();
     }
+
+    public static User of(Long userSeq, String userId, String userName) {
+        return User.builder()
+                .userSeq(userSeq)
+                .userId(userId)
+                .userName(userName)
+                .build();
+    }
 }
