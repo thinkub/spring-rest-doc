@@ -25,4 +25,27 @@ public class Project {
                 .registerUserId(entity.getUser().getUserId())
                 .build();
     }
+
+    public static Project of(Long projectId, String projectName, Long registerUserSeq, String registerUserId) {
+        return Project.builder()
+                .projectId(projectId)
+                .projectName(projectName)
+                .registerUserSeq(registerUserSeq)
+                .registerUserId(registerUserId)
+                .build();
+    }
+
+    @Getter
+    @Builder(access = AccessLevel.PRIVATE)
+    public static class Create {
+        private String projectName;
+        private Long registerUserSeq;
+
+        public static Create of(String projectName, Long registerUserSeq) {
+            return Create.builder()
+                    .projectName(projectName)
+                    .registerUserSeq(registerUserSeq)
+                    .build();
+        }
+    }
 }

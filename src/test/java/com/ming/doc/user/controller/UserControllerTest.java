@@ -63,7 +63,7 @@ class UserControllerTest {
                         getDocumentResponse(),
                         pathParameters(parameterWithName("userSeq").description("사용자 시퀀스")),
                         responseFields(
-                                fieldWithPath("userSeq").type(Long.class).description("사용자 시퀀스"),
+                                fieldWithPath("userSeq").type(JsonFieldType.NUMBER).description("사용자 시퀀스"),
                                 fieldWithPath("userId").type(JsonFieldType.STRING).description("아이디"),
                                 fieldWithPath("userName").type(JsonFieldType.STRING).description("이름")
                         )
@@ -90,11 +90,11 @@ class UserControllerTest {
                         getDocumentRequest(),
                         getDocumentResponse(),
                         requestFields(
-                                fieldWithPath("userId").type(JsonFieldType.STRING).description("아이디").optional(),
+                                fieldWithPath("userId").type(JsonFieldType.STRING).description("아이디"),
                                 fieldWithPath("userName").type(JsonFieldType.STRING).description("이름").optional()
                         ),
                         responseFields(
-                                fieldWithPath("userSeq").type(Long.class).description("사용자 시퀀스"),
+                                fieldWithPath("userSeq").type(JsonFieldType.NUMBER).description("사용자 시퀀스"),
                                 fieldWithPath("userId").type(JsonFieldType.STRING).description("아이디"),
                                 fieldWithPath("userName").type(JsonFieldType.STRING).description("이름")
                         )
@@ -123,8 +123,8 @@ class UserControllerTest {
                         getDocumentResponse(),
                         pathParameters(parameterWithName("userSeq").description("사용자 시퀀스")),
                         requestFields(
-                                fieldWithPath("userId").type(JsonFieldType.STRING).description("아이디"),
-                                fieldWithPath("userName").type(JsonFieldType.STRING).description("이름")
+                                fieldWithPath("userId").type(JsonFieldType.STRING).description("아이디").optional(),
+                                fieldWithPath("userName").type(JsonFieldType.STRING).description("이름").optional()
                         ),
                         responseFields(
                                 fieldWithPath("userSeq").type(JsonFieldType.NUMBER).description("사용자 시퀀스"),

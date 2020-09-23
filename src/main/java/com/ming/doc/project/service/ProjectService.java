@@ -22,14 +22,15 @@ public class ProjectService {
     private final UserRepository userRepository;
 
     @Transactional
-    public Long createProject(Project project) {
-        Optional<UserEntity> userOptional = userRepository.findById(project.getRegisterUserSeq());
-        if (!userOptional.isPresent()) {
+    public Project createProject(Project.Create create) {
+        Optional<UserEntity> userOptional = userRepository.findById(create.getRegisterUserSeq());
+        if (userOptional.isEmpty()) {
             return null;
         }
         UserEntity userEntity = userOptional.get();
-        ProjectEntity projectEntity = ProjectEntity.createProject(project.getProjectName(), userEntity);
-        return projectRepository.save(projectEntity).getProjectId();
+        ProjectEntity projectEntity = ProjectEntity.createProject(create.getProjectName(), userEntity);
+        projectRepository.save(projectEntity);
+        return Project.ofEntity(projectEntity);
     }
 
     @Transactional
