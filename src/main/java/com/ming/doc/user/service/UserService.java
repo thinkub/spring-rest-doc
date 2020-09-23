@@ -19,19 +19,20 @@ public class UserService {
     private final UserRepository userRepository;
 
     @Transactional
-    public Long createUser(User user) {
-        UserEntity userEntity = UserEntity.createUser(user.getUserId(), user.getUserName());
-        return userRepository.save(userEntity).getUserSeq();
+    public User createUser(User.Create create) {
+        UserEntity userEntity = UserEntity.createUser(create.getUserId(), create.getUserName());
+        userRepository.save(userEntity);
+        return User.ofEntity(userEntity);
     }
 
     @Transactional
-    public User modifyUser(User user) {
-        Optional<UserEntity> userOptional = userRepository.findById(user.getUserSeq());
+    public User modifyUser(Long userSeq, User.Modify modify) {
+        Optional<UserEntity> userOptional = userRepository.findById(userSeq);
         if (userOptional.isPresent()) {
-            return user;
+            return null;
         }
         UserEntity userEntity = userOptional.get();
-        userEntity.modifyUser(user);
+        userEntity.modifyUser(modify);
         return User.ofEntity(userEntity);
     }
 

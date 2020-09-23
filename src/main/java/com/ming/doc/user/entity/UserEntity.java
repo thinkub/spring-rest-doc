@@ -30,9 +30,9 @@ public class UserEntity {
         return new UserEntity(userId, userName);
     }
 
-    public void modifyUser(User user) {
-        this.userId = user.getUserId();
-        this.userName = user.getUserName();
+    public void modifyUser(User.Modify modify) {
+        this.userId = modify.getUserId();
+        this.userName = modify.getUserName();
     }
 
     private UserEntity(String userId, String userName) {

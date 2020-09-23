@@ -33,4 +33,32 @@ public class User {
                 .userName(userName)
                 .build();
     }
+
+    @Getter
+    @Builder(access = AccessLevel.PRIVATE)
+    public static class Create {
+        private String userId;
+        private String userName;
+
+        public static Create of(String userId, String userName) {
+            return Create.builder()
+                    .userId(userId)
+                    .userName(userName)
+                    .build();
+        }
+    }
+
+    @Getter
+    @Builder(access = AccessLevel.PRIVATE)
+    public static class Modify {
+        private String userId;
+        private String userName;
+
+        public static Modify of(String userId, String userName) {
+            return Modify.builder()
+                    .userId(userId)
+                    .userName(userName)
+                    .build();
+        }
+    }
 }

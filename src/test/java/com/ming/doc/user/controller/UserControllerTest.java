@@ -20,6 +20,8 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
 import static com.ming.doc.ApiDocumentUtils.getDocumentRequest;
 import static com.ming.doc.ApiDocumentUtils.getDocumentResponse;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
@@ -61,7 +63,7 @@ class UserControllerTest {
                         getDocumentResponse(),
                         pathParameters(parameterWithName("userSeq").description("사용자 시퀀스")),
                         responseFields(
-                                fieldWithPath("userSeq").type(JsonFieldType.NUMBER).description("사용자 시퀀스"),
+                                fieldWithPath("userSeq").type(Long.class).description("사용자 시퀀스"),
                                 fieldWithPath("userId").type(JsonFieldType.STRING).description("아이디"),
                                 fieldWithPath("userName").type(JsonFieldType.STRING).description("이름")
                         )
@@ -71,14 +73,14 @@ class UserControllerTest {
     @Test
     void createUser() throws Exception {
         // given
-        User user = User.of(null, "thinkub", "Ming");
-        given(userService.createUser(user)).willReturn(1L);
+        User.Create create = User.Create.of("thinkub", "Ming");
+        given(userService.createUser(any())).willReturn(User.of(1L, "thinkub", "Ming"));
 
         // when
         ResultActions resultActions = mockMvc.perform(RestDocumentationRequestBuilders.post("/user")
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .content(objectMapper.writeValueAsString(user)))
+                .content(objectMapper.writeValueAsString(create)))
                 .andDo(MockMvcResultHandlers.print());
 
         // then
@@ -88,11 +90,13 @@ class UserControllerTest {
                         getDocumentRequest(),
                         getDocumentResponse(),
                         requestFields(
-                                fieldWithPath("userId").type(JsonFieldType.STRING).description("아이디"),
-                                fieldWithPath("userName").type(JsonFieldType.STRING).description("이름")
+                                fieldWithPath("userId").type(JsonFieldType.STRING).description("아이디").optional(),
+                                fieldWithPath("userName").type(JsonFieldType.STRING).description("이름").optional()
                         ),
                         responseFields(
-                                fieldWithPath("userSeq").type(JsonFieldType.NUMBER).description("사용자 시퀀스")
+                                fieldWithPath("userSeq").type(Long.class).description("사용자 시퀀스"),
+                                fieldWithPath("userId").type(JsonFieldType.STRING).description("아이디"),
+                                fieldWithPath("userName").type(JsonFieldType.STRING).description("이름")
                         )
                 ));
     }
@@ -100,12 +104,15 @@ class UserControllerTest {
     @Test
     void modifyUser() throws Exception {
         // given
+        User.Modify modify = User.Modify.of("thinkub-new", "Ming-new");
         User user = User.of(1L, "thinkub-new", "Ming-new");
-        given(userService.modifyUser(user)).willReturn(user);
+        given(userService.modifyUser(eq(1L), any())).willReturn(user);
 
         // when
-        ResultActions resultActions = mockMvc.perform(RestDocumentationRequestBuilders.put("/user/{userSeq}", 1L, user)
-                .accept(MediaType.APPLICATION_JSON_VALUE))
+        ResultActions resultActions = mockMvc.perform(RestDocumentationRequestBuilders.put("/user/{userSeq}", 1L)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(modify)))
                 .andDo(MockMvcResultHandlers.print());
 
         // then

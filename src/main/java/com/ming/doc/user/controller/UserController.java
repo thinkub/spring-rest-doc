@@ -23,16 +23,15 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<Long> createUser(@RequestBody User user) {
-        Long userSeq = userService.createUser(user);
-        return ResponseEntity.ok().body(userSeq);
+    public ResponseEntity<User> createUser(@RequestBody User.Create createUser) {
+        User user = userService.createUser(createUser);
+        return ResponseEntity.ok().body(user);
     }
 
     @PutMapping("/{userSeq}")
-    public ResponseEntity<User> modifyUser(@PathVariable Long userSeq, @RequestBody User user) {
-        user.setUserSeq(userSeq);
-        User modifyUser = userService.modifyUser(user);
-        return ResponseEntity.ok().body(modifyUser);
+    public ResponseEntity<User> modifyUser(@PathVariable Long userSeq, @RequestBody User.Modify modify) {
+        User user = userService.modifyUser(userSeq, modify);
+        return ResponseEntity.ok().body(user);
     }
 
     @DeleteMapping("/{userSeq}")
